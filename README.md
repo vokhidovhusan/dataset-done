@@ -4,7 +4,8 @@
 
 ### Pip
 #### $ wget https://bootstrap.pypa.io/get-pip.py
-#### $ sudo python3 get-pip.py
+#### Linux $ sudo python3 get-pip.py
+#### Windows > python3 get-pip.py
 
 ### OpenCV
 #### $ pip install opencv-contrib-python
