@@ -2,7 +2,6 @@ import argparse
 import os
 import sys
 import cv2
-import numpy as np
 from pathlib import Path
 
 def save_image(image_path, image_name, image, overwrite=False):
