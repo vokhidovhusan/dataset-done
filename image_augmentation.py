@@ -12,12 +12,12 @@ from keras.preprocessing.image import ImageDataGenerator
 
 #Creating instance of the ImageDataGenerator class
 datagen = ImageDataGenerator(
-        rotation_range=0,
+        rotation_range=30,
         width_shift_range=[-200,200],
         height_shift_range=0.5,
         rescale=1./255,
         shear_range=0.5,
-        zoom_range=[0.2,1.0],
+        zoom_range=0.5,
         horizontal_flip=True,
         brightness_range=[0.2, 1.0],
         fill_mode='nearest')
@@ -36,7 +36,7 @@ def run_image(entry, augmented_image_path):
     samples = expand_dims(data, 0)
 
     # creating image data augmentation generator
-    datagen = ImageDataGenerator(rotation_range=0, horizontal_flip=0)
+    datagen = ImageDataGenerator(rotation_range=10, horizontal_flip=0, brightness_range = [0.5,1.0], width_shift_range=0.1, height_shift_range=0.1, zoom_range=0.1)
 
     # preparing iterator
     it = datagen.flow(samples, batch_size=1)
