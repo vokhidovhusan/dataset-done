@@ -6,7 +6,7 @@ from pathlib import Path
 from shutil import move, copyfile
 
 
-def move_or_copy_file_to_other_directory(path, file_name, src='JPEGImages', dst='labels', copy=True, overwrite=True):
+def move_or_copy_file_to_other_directory(path, file_name, src='JPEGImages', dst='labels', copy=False, overwrite=True):
     src_path = Path(os.path.join(path, src))
     dst_path = Path(os.path.join(path, dst))
     dst_path.mkdir(exist_ok=True)
@@ -50,7 +50,7 @@ def main(args):
     path = args.root_dir + '/{}/JPEGImages/'
     for sub in args.sub_dir:
         print('sub_dir: {}'.format(sub))
-        img_path = []
+        img_path = []        
         for _, _, f in os.walk(path.format(sub)):
             for file in f:
                 if '.txt' in file:
@@ -59,6 +59,7 @@ def main(args):
                     print(image_file)
                     img_path.append(path.format(sub) + image_file)
                     move_or_copy_file_to_other_directory(os.path.join(args.root_dir, sub), file)
+       
 
         random.shuffle(img_path)
 
@@ -71,7 +72,11 @@ def main(args):
                 f.write(p + '\n')
 
         with open('{}/{}/{}.txt'.format(args.root_dir, sub, 'val'), 'w+') as f:
-            for p in img_path[len(img_path) - int(len(img_path)*0.1):]:
+            for p in img_path[len(img_path) - int(len(img_path)*0.1):len(img_path) - int(len(img_path)*0.05)]:
+                f.write(p + '\n')
+        
+        with open('{}/{}/{}.txt'.format(args.root_dir, sub, 'test'), 'w+') as f:
+            for p in img_path[len(img_path) - int(len(img_path)*0.05):]:
                 f.write(p + '\n')
 
 def parse_arguments(argv):

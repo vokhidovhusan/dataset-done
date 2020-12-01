@@ -16,6 +16,7 @@ def main(args):
         path_count_sublabels = '{}/{}.json'.format(label_count_path, 'count_sublabels')
         path_count_labels = '{}/{}.json'.format(label_count_path, 'count_labels')
         path_labels_filenames = '{}/{}.json'.format(label_count_path, 'labels_filenames')
+        path_differenct_lables = '{}/{}.json'.format(label_count_path, 'differenct_lables')
         path_labels = '{}/{}.json'.format(path, 'labels')
 
         # remove existing txt files for annotation
@@ -23,6 +24,7 @@ def main(args):
         # utils.remove_label_json_files(path_count_labels)
 
         labels_filenames_dict = {}
+        differenct_lables_dict = {}
         count_json = 0
         count_img = 0
         sublabels_list = []
@@ -46,6 +48,12 @@ def main(args):
                     else:
                         # print('file not found "{}/"'.format(file))
                         continue
+
+                    if len(file_labels) > 1:
+                        contains_duplicates = any(file_labels.count(element) > 1 for element in file_labels)
+                        if not contains_duplicates:
+                            print(filename)
+                            differenct_lables_dict[filename] = file_labels
 
                     for label in file_labels:
                         if label in labels_filenames_dict:
@@ -90,6 +98,10 @@ def main(args):
         with open(path_labels_filenames, 'a+') as out_file:
             print('writing into: ', path_labels_filenames)
             out_file.write(json.dumps(labels_filenames_dict))
+        
+        with open(path_differenct_lables, 'a+') as out_file:
+            print('writing into: ', path_differenct_lables)
+            out_file.write(json.dumps(differenct_lables_dict))
 
 
 def parse_arguments(argv):

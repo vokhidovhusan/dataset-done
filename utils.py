@@ -1,5 +1,6 @@
 import os
 import glob
+import cv2
 import json
 import sys
 from pathlib import Path
@@ -62,6 +63,39 @@ def move_file_to_directories(path, dis_folder, file_name, overwrite=False):
     finally:
         return bool_success
 
+def get_box(path, filename):
+
+    with open('{}/{}.json'.format(path, filename), 'r') as f:
+        distros_dict = json.load(f)
+
+    h = distros_dict['imageHeight']
+    w = distros_dict['imageWidth']
+
+    box_list = []
+
+    for obj in distros_dict['shapes']:
+        c = obj['label']
+        # print(c)
+        # label = c.partition("_")[0][:-2]  # nplate
+        # label_index = c.partition("_")[0] # nplate10
+        # print(label, label_index)
+
+        if c is None:
+            continue
+
+        xmlbox = obj['points']
+
+        b = (float(xmlbox[0][0]), float(xmlbox[1][0]), float(
+            xmlbox[0][1]), float(xmlbox[1][1]))
+        bb = convert((w, h), b)
+
+        # print('{:f} {:f} {:f} {:f}\n'.format(bb[0], bb[1], bb[2], bb[3]))
+        # out_file.write('{:f} {:f} {:f} {:f}\n'.format(bb[0], bb[1], bb[2], bb[3]))
+        box_list.append([c, w, h, b[0], b[1], b[2], b[3]])
+
+
+    cv2.destroyAllWindows()
+    return box_list
 
 
 
@@ -106,7 +140,69 @@ def get_lables(path, filename):
         return labels
 
 
+def cut_label(path, filename, box_list, img_folder = 'images', crop_img_folder = 'cropped_images', margin = 0.1):
+    success = False
+    # c, w, h, x0, x1, y0,
+    try:
+        crop_img_folder = Path(os.path.join(path, crop_img_folder))
+        print(crop_img_folder)
+        crop_img_folder.mkdir(parents=True, exist_ok=True)
+        image_path = os.path.join('{}/{}/{}.jpg'.format(path, img_folder, filename))
+        print('Reading file {}'.format(image_path))
+        img = cv2.imread(image_path)
+        img.shape
 
+        label_count = 0
+
+        for c, w, h, x0, x1, y0, y1 in box_list:
+
+            crop_img_c_folder = Path(os.path.join(crop_img_folder, c))
+            print(crop_img_c_folder)
+            crop_img_c_folder.mkdir(parents=True, exist_ok=True)
+
+            label_count += 1
+            print(c, w, h, x0, x1, y0, y1)
+
+
+            margin_y = (y1 - y0) * margin 
+            print(margin_y)
+            margin_x = (x1 - x0) * margin
+            print(margin_x)
+
+            if y0 - margin_y > 0:
+                yy0 = y0 - margin_y 
+            else:
+                yy0 = 0
+
+            if y1 + margin_y < h:
+                yy1 = y1 + margin_y
+            else:
+                yy1 = h
+
+            if x0 - margin_x > 0:
+                xx0 = x0 - margin_x
+            else:
+                xx0 = 0
+
+            if x1 + margin_x < w:
+                xx1 = x1 + margin_x
+            else:
+                xx1 = w
+            print(w, h, x0, x1, y0, y1)
+            crop_img = img[int(yy0):int(yy1), int(xx0):int(xx1)]
+
+            print('{}/{}_{}_{}.jpg'.format(crop_img_c_folder, filename, '{0:003}'.format(label_count), c))
+            crop_img_path = os.path.join('{}/{}_{}_{}.jpg'.format(crop_img_c_folder, filename, '{0:003}'.format(label_count), c))
+
+            cv2.imwrite(crop_img_path, crop_img)
+            cv2.waitKey(0)
+
+        success = True
+    except AttributeError:
+        print("file does not have shape")
+        success = False
+    finally:
+        return success
 
 def convert_annotation(path, filename, classes):
 
