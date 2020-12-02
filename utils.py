@@ -3,6 +3,7 @@ import glob
 import cv2
 import json
 import sys
+import numpy as np
 from pathlib import Path
 from shutil import move
 
@@ -97,7 +98,35 @@ def get_box(path, filename):
     cv2.destroyAllWindows()
     return box_list
 
+def get_json_parameters(path, filename):
 
+    with open('{}/{}.json'.format(path, filename), 'r') as f:
+        distros_dict = json.load(f)
+
+    h = distros_dict['imageHeight']
+    w = distros_dict['imageWidth']
+    
+    box_list = []
+
+    for obj in distros_dict['shapes']:
+        c = obj['label']
+        # print(c)
+        # label = c.partition("_")[0][:-2]  # nplate
+        # label_index = c.partition("_")[0] # nplate10
+        # print(label, label_index)
+
+        if c is None:
+            continue
+
+        xmlbox = obj['points']
+
+        # print('{:f} {:f} {:f} {:f}\n'.format(bb[0], bb[1], bb[2], bb[3]))
+        # out_file.write('{:f} {:f} {:f} {:f}\n'.format(bb[0], bb[1], bb[2], bb[3]))
+        box_list.append([c, xmlbox])
+
+    box_list = sorted(box_list, key=lambda x: x[1][0][0], reverse=False)
+    # cv2.destroyAllWindows()
+    return box_list, [h, w]
 
 def get_lables(path, filename):
     labels = []
@@ -138,6 +167,21 @@ def get_lables(path, filename):
         labels = []
     finally:
         return labels
+
+def resizeWithAspectRatio(image, width=None, height=None, inter=cv2.INTER_AREA):
+    dim = None
+    (h, w) = image.shape[:2]
+
+    if width is None and height is None:
+        return image
+    if width is None:
+        r = height / float(h)
+        dim = (int(w * r), height)
+    else:
+        r = width / float(w)
+        dim = (width, int(h * r))
+
+    return cv2.resize(image, dim, interpolation=inter)
 
 
 def cut_label(path, filename, box_list, img_folder = 'images', crop_img_folder = 'cropped_images', margin = 0.1):
