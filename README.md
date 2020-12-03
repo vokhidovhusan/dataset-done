@@ -1,6 +1,6 @@
 # dataset-done
 
-## installations
+### installations
 
 #### pip
 ```
@@ -17,6 +17,6 @@ $ pip install tensorflow
 $ pip install keras
 ```
 
-## Run
-### extract-images-from-video
+### Run
+#### extract-images-from-video
 ```python extract-images-from-video.py --video_path [video_path]```
