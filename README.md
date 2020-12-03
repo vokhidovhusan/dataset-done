@@ -12,6 +12,7 @@ $ sudo python3 get-pip.py
 #### Python labraries
 ```$ pip install scipy matplotlib pillow```
 #### Tensorflow and Keras
+
 ```
 $ pip install tensorflow
 $ pip install keras
