@@ -88,7 +88,8 @@ def parse_arguments(argv):
     parser.add_argument('--sub_dir', action='append', type=str,
                         help='list of target VOC datasets')
     parser.add_argument('--img_ext', type=str,
-                        help='extension of image files')
+                        help='extension of image files', default='jpg')
+    
 
     return parser.parse_args(argv)
 

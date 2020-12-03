@@ -5,7 +5,7 @@ import json
 import sys
 import numpy as np
 from pathlib import Path
-from shutil import move
+from shutil import move, copy
 
 
 def remove_annot_files(path):
@@ -57,6 +57,29 @@ def move_file_to_directories(path, dis_folder, file_name, overwrite=False):
 
     except Exception as e:
         print('{} {} "{}/"'.format(e.args[0], e.args[1], os.path.join(path, p)))
+        bool_success = False
+    except:
+        print('unexpected error:', sys.exc_info())
+        bool_success = False
+    finally:
+        return bool_success
+
+
+def copy_file_to_directories_full_path(src, dst,  overwrite=False):
+    bool_success = True
+    try:
+        if os.path.exists(dst) and not overwrite:
+            raise Exception("file exists!", "Can't move to")
+        else:
+            copy(src, dst)
+            print('file has been copied to "{}/"'.format(dst))
+
+    except IOError as e:
+        print('unable to move file %s' % e)
+        bool_success = False
+
+    except Exception as e:
+        print('{} {} "{}/"'.format(e.args[0], e.args[1], os.path.join(dst)))
         bool_success = False
     except:
         print('unexpected error:', sys.exc_info())
