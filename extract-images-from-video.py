@@ -45,7 +45,7 @@ def main(args):
                         if not ret:
                             break
                         print('read a new frame:')
-                        if count % 5 == 0:
+                        if count % args.n_frames == 0:
                             image_name = "{}_frame_{}.jpg".format(entry.name,'{0:000000009}'.format(count))
                             save_image(image_path, image_name, image)
                         count += 1
@@ -55,7 +55,8 @@ def main(args):
 
 def parse_arguments(argv):
     parser = argparse.ArgumentParser(add_help=False)
-    parser.add_argument("--video_path", default='video', help="videos for extracting", type=str, )
+    parser.add_argument("--video_path", type=str, default='video', help="videos for extracting")
+    parser.add_argument('--n_frames', type=int, default=5, help='number for captureing every nth from a video')
     args = parser.parse_args()
     return args
 
