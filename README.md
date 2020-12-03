@@ -1,13 +1,12 @@
 # dataset-done
 
-## installation
+## installations
 
-### Download pip
-```$ wget https://bootstrap.pypa.io/get-pip.py```
-#### Install on Linux 
-```$ sudo python3 get-pip.py```
-#### Install on Windows
-```python3 get-pip.py```
+### pip
+```
+$ wget https://bootstrap.pypa.io/get-pip.py
+$ sudo python3 get-pip.py
+```
 
 
 ### OpenCV
@@ -17,7 +16,8 @@
 ```$ pip install scipy matplotlib pillow```
 
 ### Tensorflow and Keras
-```$ pip install tensorflow
+```
+$ pip install tensorflow
 $ pip install keras
 ```
 
