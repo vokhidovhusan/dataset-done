@@ -21,34 +21,34 @@ $ pip install keras
 ### Run
 ### Image extraction from video
 #### Extract images from multiple videos
-Extracts every frame from multiple videos and saves the extracted images in a folder by default.
+1. Extracts every frame from multiple videos and saves the extracted images in a folder by default.
 
-```$ python extract-images-from-video.py multiple_videos --dir [videos_path]```
+`$ python extract-images-from-video.py multiple_videos --dir [videos_path]`
 
-For example:
-```$ python extract-images-from-video.py multiple_videos --dir  video/```
+For example
+`$ python extract-images-from-video.py multiple_videos --dir  video/`
 
-You want to assign nth number so that you can take ever nth frame from a video.
+2. You want to assign nth number so that you can take ever nth frame from a video.
 
-```$ python extract-images-from-video.py multiple_videos --dir [video_path] --n_frames [integer number]```
+`$ python extract-images-from-video.py multiple_videos --dir [video_path] --n_frames [integer number]`
 
 For examples
 
-```$ python extract-images-from-video.py multiple_videos --dir  video/ --n_frame 20```
+`$ python extract-images-from-video.py multiple_videos --dir  video/ --n_frame 20`
 
 #### Extract images from single video
 
-Extracts images from single video and saves the extracted images in a folder.
+1. Extracts images from single video and saves the extracted images in a folder.
 
-```$ python extract-images-from-video.py single_video --path [video_path]```
+`$ python extract-images-from-video.py single_video --path [video_path]`
 
-For example:
-```$ python extract-images-from-video.py single_video --path video/videoplayback.mp4```
+For example
+`$ python extract-images-from-video.py single_video --path video/videoplayback.mp4`
 
-To assign nth number.
+2. To assign nth number.
 
-```$ python extract-images-from-video.py single_video --path [video_path] --n_frames [integer number]```
+`$ python extract-images-from-video.py single_video --path [video_path] --n_frames [integer number]`
 
 For examples
 
-```$ python extract-images-from-video.py single_video --path video/videoplayback.mp4 --n_frame 20```
+`$ python extract-images-from-video.py single_video --path video/videoplayback.mp4 --n_frame 20`
