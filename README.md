@@ -22,7 +22,7 @@ $ pip install keras
 ### Image extraction from video
 #### Extract images from multiple videos
 
-Extracts every frame from multiple videos and saves the extracted images in a folder by default.
+1. By default extracts every frame from multiple videos and saves the extracted images in a folder.
 ```
 $ python extract-images-from-video.py multiple_videos --dir [videos_path]
 ```
