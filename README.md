@@ -28,7 +28,7 @@ $ pip install keras
 For example
 `$ python extract-images-from-video.py multiple_videos --dir  video/`
 
-2. You want to assign nth number so that you can take ever nth frame from a video.
+2. You want to assign nth number so that you can take every nth frame from a video.
 
 `$ python extract-images-from-video.py multiple_videos --dir [video_path] --n_frames [integer number]`
 
