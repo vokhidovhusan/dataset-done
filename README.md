@@ -24,7 +24,7 @@ Extracts every frame by default from multiple videos and saves the extracted ima
 
 ```python extract-images-from-video.py multiple_videos --dir [videos_path]```
 
-for example:
+For example:
 ```ython extract-images-from-video.py multiple_videos --dir  video/```
 
 You want to assign nth number so that you can take ever nth frame from a video.
@@ -41,7 +41,7 @@ Extracts images from single video and saves the extracted images in a folder.
 
 ```python extract-images-from-video.py single_video --path [video_path]```
 
-for example:
+For example:
 ```python extract-images-from-video.py single_video --path video/videoplayback.mp4```
 
 To assign nth number.
