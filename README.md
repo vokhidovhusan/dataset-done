@@ -19,15 +19,35 @@ $ pip install keras
 ```
 
 ### Run
-#### extract-images-from-video
-Extracts every frame by default from a video and saves the extracted images in a folder.
+#### extract images from multiple videos
+Extracts every frame by default from multiple videos and saves the extracted images in a folder.
 
-```python extract-images-from-video.py --video_path [video_path]```
+```python extract-images-from-video.py multiple_videos --dir [videos_path]```
+
+for example:
+```ython extract-images-from-video.py multiple_videos --dir  video/```
 
 You want to assign nth number so that you can take ever nth frame from a video.
 
-```python extract-images-from-video.py --video_path [video_path] --n_frames [integer number]```
+```python extract-images-from-video.py multiple_videos --dir [video_path] --n_frames [integer number]```
 
 For examples
 
-```python extract-images-from-video.py --video_path my_videos --n_frames 20```
+```python extract-images-from-video.py multiple_videos --dir  video/ --n_frame 20```
+
+#### extract images from single video
+
+Extracts images from single video and saves the extracted images in a folder.
+
+```python extract-images-from-video.py single_video --path [video_path]```
+
+for example:
+```python extract-images-from-video.py single_video --path video/videoplayback.mp4```
+
+To assign nth number.
+
+```python extract-images-from-video.py single_video --path [video_path] --n_frames [integer number]```
+
+For examples
+
+```python extract-images-from-video.py single_video --path video/videoplayback.mp4 --n_frame 20```
