@@ -33,7 +33,6 @@ For example
 `$ python extract-images-from-video.py multiple_videos --dir [video_path] --n_frames [integer number]`
 
 For examples
-
 `$ python extract-images-from-video.py multiple_videos --dir  video/ --n_frame 20`
 
 #### Extract images from single video
@@ -50,5 +49,4 @@ For example
 `$ python extract-images-from-video.py single_video --path [video_path] --n_frames [integer number]`
 
 For examples
-
 `$ python extract-images-from-video.py single_video --path video/videoplayback.mp4 --n_frame 20`
