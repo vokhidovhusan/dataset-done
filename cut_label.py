@@ -36,15 +36,12 @@ def main(args):
                         # utils.move_file_to_directories(path, 'JPEGImages', 'JPEGImages_success', file.replace('.json', '.jpg'))
                         count_img += 1
 
-    print(count_json)
-    print(count_img)
-
 def parse_arguments(argv):
 
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--root_dir', type=str,
-                        help='root of VOC development kit', default='/home/husan/lightvision/datasets/label_cut/')
+                        help='root of VOC development kit', default='/home/husan/lightvision/datasets/')
     parser.add_argument('--sub_dir', action='append', type=str, help='root of VOC development kit')
 
     return parser.parse_args(argv)

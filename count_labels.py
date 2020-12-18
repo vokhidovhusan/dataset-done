@@ -46,7 +46,7 @@ def main(args):
                         if(utils.move_file_to_directories(path, 'Annotations', file)):
                             count_img += 1
                     else:
-                        # print('file not found "{}/"'.format(file))
+                       # print('file not found "{}/"'.format(file))
                         continue
 
                     if len(file_labels) > 1:
@@ -109,7 +109,7 @@ def parse_arguments(argv):
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--root_dir', type=str,
-                        help='root of VOC development kit', default='/home/husan/lightvision/datasets/label_count/')
+                        help='root of VOC development kit', default='/home/husan/lightvision/datasets/')
     parser.add_argument('--sub_dir', action='append', type=str, help='root of VOC development kit')
 
     return parser.parse_args(argv)

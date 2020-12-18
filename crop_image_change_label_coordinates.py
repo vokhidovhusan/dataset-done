@@ -18,7 +18,7 @@ def main(args):
         # utils.remove_annot_files(path)
         count_json = 0
         count_img = 0
-        for _, _, f in os.walk(os.path.join(path, 'Annotations')):
+        for _, _, f in os.walk(path):
 
             for file in f:
                 if '.json' in file:
@@ -108,8 +108,8 @@ def main(args):
                     print(start_end_list)       
                     
                     count = 0  
-                    image_path = os.path.join(path, 'Annotations', file.replace('.json', '.jpg'))
-                    
+                    image_path = os.path.join(path, 'JPEGImages', file.replace('.json', '.jpg'))
+                    print(image_path)
                     img = cv2.imread(image_path)
                     
                     # img_resize = utils.resizeWithAspectRatio(img, height=1024)
@@ -119,6 +119,7 @@ def main(args):
                     for start, end,  shapes_d in start_end_list:
                         
                         crop_image_path = '{}/{}_{}.jpg'.format(path, filename, count)
+                        print(crop_image_path)
                         json_path = '{}/{}_{}.json'.format(path, filename, count)
                         # print(0,h_w[0], int(start_end[0]), int(start_end[1]))
                         # crop = img[0:h_w[0], int(start_end[0]):int(start_end[1])]
@@ -160,7 +161,7 @@ def parse_arguments(argv):
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--root_dir', type=str,
-                        help='root of VOC development kit', default='/home/husan/lightvision/datasets/')
+                        help='root of VOC development kit', default='/home/husan/lightvision/datasets/label_correction/')
     parser.add_argument('--sub_dir', action='append', type=str, help='root of VOC development kit')
 
     return parser.parse_args(argv)

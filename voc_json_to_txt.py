@@ -35,8 +35,8 @@ def parse_arguments(argv):
                         help='list of classes for subset', default =
                         [
                             # 'bus', 'moto',
-                            # '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B'
-                            'rnplate',
+                            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-', 'A', 'B', 'G', 'M','N'
+                            # 'rnplate',
                             # 'rnplate01',
                             # 'rnplate02',
                             # 'rnplate03',

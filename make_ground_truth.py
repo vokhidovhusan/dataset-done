@@ -16,14 +16,17 @@ def main(args):
         path_differenct_lables = '{}/{}.json'.format(label_count_path, 'differenct_lables')
         differenct_lables_dict = {}
         labels_filenames_dict = {}
+        print(os.path.join(path))
         
-        for _, _, f in os.walk(os.path.join(path)):
-            for file in f:
-                if '.json' in file:                    
+        for _, _, f in os.walk(os.path.join(path)):            
+            for file in f:                
+                if '.json' in file:
                     filename = file.replace('.json', '')
-                    img_file = file.replace('.json', '.jpg')                    
+                    img_file = file.replace('.json', '.jpg')            
+                    print(path)        
+                    print(filename)
                     file_labels = utils.get_lables(path, filename)
-                    
+                    print(file_labels)
                     if len(file_labels) <= 0:
                         continue
                     if len(file_labels) > 1:
@@ -58,10 +61,6 @@ def main(args):
             for d in data:
                 print(d)
                 print(data[d])
-        
-            # Print the data of dictionary 
-            # print("\nPeople1:", data['people1']) 
-            # print("\nPeople2:", data['people2']) 
 
 
 def parse_arguments(argv):

@@ -151,9 +151,107 @@ def get_json_parameters(path, filename):
     # cv2.destroyAllWindows()
     return box_list, [h, w]
 
+def check_json_parameters(path, filename, modified_dir = 'modified_json'):
+    wrong_annotation = False
+    json_dict = {}
+    if True:
+    # try:        
+        with open('{}/{}.json'.format(path, filename), 'r') as f:
+            distros_dict = json.load(f)
+            
+            
+
+        h = distros_dict['imageHeight']
+        w = distros_dict['imageWidth']
+        shapes = []
+
+        for obj in distros_dict['shapes']:                       
+            
+            xmlbox = obj['points']
+            
+            
+            x0 = float(xmlbox[0][0]) 
+            x1 = float(xmlbox[1][0]) 
+            y0 = float(xmlbox[0][1]) 
+            y1 = float(xmlbox[1][1])
+
+            if x0 < 0:
+                x0 = 0
+                wrong_annotation = True
+
+            if x1 < 0: 
+                x1 = 0
+                wrong_annotation = True
+
+            if y0 < 0:
+                y0 = 0
+                wrong_annotation = True
+
+            if y1 < 0:
+                y1 = 0
+                wrong_annotation = True
+                
+
+            if x0 > w:
+                x0 = w
+                wrong_annotation = True
+
+            if x1 > w:
+                x1 = w
+                wrong_annotation = True
+
+            if y0 > h:
+                y0 = h
+                wrong_annotation = True
+
+            if y1 > h:
+                y1 = h
+                wrong_annotation = True            
+
+            if x0 > x1:                
+                x = x0
+                x0 = x1
+                x1 = x
+                wrong_annotation = True
+
+            if y0 > y1:                
+                y = y0
+                y0 = y1
+                y1 = y
+                wrong_annotation = True
+                
+            obj['points'] = [[x0, y0],[x1, y1]]            
+            shapes.append(obj)
+        
+        if wrong_annotation:
+            json_dict = distros_dict        
+            json_dict['shapes'] = shapes        
+            with open('{}/{}/{}.json'.format(path,modified_dir, filename), 'w') as out_file:
+                out_file.write(json.dumps(json_dict,ensure_ascii=False, indent=4))
+
+    # except IOError as e:
+    #     # print('IOError: %s' % e)
+    #     labels = []
+    # except Exception as e:
+    #     # print('{} {} '.format(e.args[0], e.args[1]))
+    #     labels = []
+    # except:
+    #     # print('unexpected error:', sys.exc_info())
+    #     labels = []
+    # finally:
+    #     return labels
+
+    
+
+    return True
+    
+
+
+
 def get_lables(path, filename):
     labels = []
     try:
+    # if True:
         with open('{}/{}.json'.format(path, filename), 'r') as f:
             distros_dict = json.load(f)
 
@@ -166,6 +264,9 @@ def get_lables(path, filename):
 
             if b[0] < 0 or b[1] < 0 or b[2] < 0 or b[3] < 0:
                 raise Exception("wrong annotation")
+            print(b[0] , b[1] , w , b[2] , b[3] , h)
+            if b[0] > w or b[1] > w or b[2] > h or b[3] > h:
+                raise Exception("wrong annotation")
 
             if b[0] >= b[1]:
                 labels = []
@@ -173,6 +274,8 @@ def get_lables(path, filename):
             if b[2] >= b[3]:
                 labels = []
                 raise Exception("wrong annotation")
+            
+            
 
             c = obj['label']
             # c = c.partition("_")[0] # nplate10
@@ -282,7 +385,7 @@ def convert_annotation(path, filename, classes):
     for obj in distros_dict['shapes']:
         c = obj['label']
         # c = c.partition("_")[0] # nplate10
-        c = c.partition("_")[0][:-2] # nplate
+        # c = c.partition("_")[0][:-2] # nplate
 
         if c not in classes == 1:
             continue
