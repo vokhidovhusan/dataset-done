@@ -153,20 +153,20 @@ def run_aug_data_generatorimage(entry, AUGMENTED_IMAGES):
 
 
 def main(args):
-    run_blur= False
-    brightness = False
-    noise = False
-    contrast_ratio = False
-    motion_blur_hori= False
-    data_generator = False
-    
+    run_blur= args.blur
+    brightness = args.brightness
+    noise = args.noise
+    contrast_ratio = args.contrast_ratio
+    motion_blur_hori= args.motion_blur_hori
+    data_generator = False        
+
     root = args.root
-    JPEGImages = os.path.join('{}/{}'.format(root, 'clean_without_augmentation_images'))
-    LABELS = os.path.join('{}/{}'.format(root, 'clean_without_augmentation_labels'))
+    JPEGImages = os.path.join('{}/{}'.format(root, args.images))
+    LABELS = os.path.join('{}/{}'.format(root, args.labels))
     
-    AUGMENTED_IMAGES = Path(os.path.join('{}/augmented_images'.format(root)))
+    AUGMENTED_IMAGES = Path(os.path.join('{}/augmented_{}'.format(root, args.images)))
     AUGMENTED_IMAGES.mkdir(exist_ok=True)
-    AUGMENTED_LABELS = Path(os.path.join('{}/augmented_labels'.format(root)))
+    AUGMENTED_LABELS = Path(os.path.join('{}/augmented_{}'.format(root, args.labels)))
     AUGMENTED_LABELS.mkdir(exist_ok=True)
     count = 0
     for image_path, dirs, files  in os.walk(JPEGImages):
@@ -176,52 +176,73 @@ def main(args):
                 try:
                     file_name = os.path.splitext(file)[0]                
                     print(file_name)
-                    print('Root: {}'.format(root))
-                    print('File: {}'.format(file_name))                    
-                    print('AugImagesDir: {}'.format(AUGMENTED_IMAGES))
-                    print('AugLabelsDir: {}'.format(AUGMENTED_LABELS))
 
                     # Read image                    
                     img=cv2.imread('{}/{}'.format(image_path, file))                    
                     img.shape
                                                                 
-                    utils.copy_file_to_directories_full_path('{}/{}.jpg'.format(JPEGImages,file_name), '{}/{}.jpg'.format(AUGMENTED_IMAGES,count))
-                    utils.copy_file_to_directories_full_path('{}/{}.txt'.format(LABELS,file_name), '{}/{}.txt'.format(AUGMENTED_LABELS,count))
+                    utils.copy_file_to_directories_full_path('{}/{}.jpg'.format(JPEGImages, file_name), '{}/{}.jpg'.format(AUGMENTED_IMAGES, count))
+                    utils.copy_file_to_directories_full_path('{}/{}.txt'.format(LABELS, file_name), '{}/{}.txt'.format(AUGMENTED_LABELS, count))
 
                     if run_blur:
                         index = 'blur'
                         blur_img = blur(img)                        
                         cv2.imwrite('{}/{}_{}.jpg'.format(AUGMENTED_IMAGES, count, index), blur_img)                                                
-                        utils.copy_file_to_directories_full_path('{}/{}.txt'.format(LABELS,file_name), '{}/{}_{}.txt'.format(AUGMENTED_LABELS,count, index))
+                        utils.copy_file_to_directories_full_path('{}/{}.txt'.format(LABELS, file_name), '{}/{}_{}.txt'.format(AUGMENTED_LABELS, count, index))
                     if brightness:
                         index = 'brightness'
                         img_brightness = increase_brightness(img)
                         cv2.imwrite('{}/{}_{}.jpg'.format(AUGMENTED_IMAGES, count, index), img_brightness)                        
-                        utils.copy_file_to_directories_full_path('{}/{}.txt'.format(LABELS,file_name), '{}/{}_{}.txt'.format(AUGMENTED_LABELS,count, index))
+                        utils.copy_file_to_directories_full_path('{}/{}.txt'.format(LABELS, file_name), '{}/{}_{}.txt'.format(AUGMENTED_LABELS, count, index))
                     if noise:
                         index = 'noise'
                         noi = ['s&p','gauss','gauss']
                         n = np.random.choice(noi,1,replace = False)
                         img_noise = noisy(n, img)
                         cv2.imwrite('{}/{}_{}.jpg'.format(AUGMENTED_IMAGES, count, index), img_noise)                        
-                        utils.copy_file_to_directories_full_path('{}/{}.txt'.format(LABELS,file_name), '{}/{}_{}.txt'.format(AUGMENTED_LABELS,count, index))
+                        utils.copy_file_to_directories_full_path('{}/{}.txt'.format(LABELS, file_name), '{}/{}_{}.txt'.format(AUGMENTED_LABELS, count, index))
                     if contrast_ratio:
                         index = 'contrast'
                         contrast_img = contrast(img)
                         cv2.imwrite('{}/{}_{}.jpg'.format(AUGMENTED_IMAGES, count, index), contrast_img)                                          
-                        utils.copy_file_to_directories_full_path('{}/{}.txt'.format(LABELS,file_name), '{}/{}_{}.txt'.format(AUGMENTED_LABELS,count, index))  
+                        utils.copy_file_to_directories_full_path('{}/{}.txt'.format(LABELS, file_name), '{}/{}_{}.txt'.format(AUGMENTED_LABELS, count, index))  
                     if motion_blur_hori:
                         index = 'motion'
                         motion_img = motion_horizontal_blur(img)
                         cv2.imwrite('{}/{}_{}.jpg'.format(AUGMENTED_IMAGES, count, index), motion_img)
-                        utils.copy_file_to_directories_full_path('{}/{}.txt'.format(LABELS,file_name), '{}/{}_{}.txt'.format(AUGMENTED_LABELS,count, index))
+                        utils.copy_file_to_directories_full_path('{}/{}.txt'.format(LABELS, file_name), '{}/{}_{}.txt'.format(AUGMENTED_LABELS, count, index))
                     count += 1        
                 except OSError as e:
                     print(e)
+    
+
 
 def parse_arguments(argv):
     parser = argparse.ArgumentParser(add_help=False)
-    parser.add_argument("--root", default=' ', help="your dataset root directory for augmentation", type=str, )    
+    parser.add_argument("--root", required=True, 
+                        help="your dataset root directory for augmentation", 
+                        type=str,)    
+    parser.add_argument("--images", default='images', 
+                        help="image directory for augmentation", 
+                        type=str,)
+    parser.add_argument("--labels", default='labels', 
+                        help="label directory for augmentation", 
+                        type=str,)
+    parser.add_argument('--blur',
+                        action='store_false',
+                        help='enable brightness')
+    parser.add_argument('--brightness',
+                        action='store_false',
+                        help='enable brightness')
+    parser.add_argument('--noise',
+                        action='store_false',
+                        help='enable noise')
+    parser.add_argument('--contrast_ratio',
+                        action='store_false',
+                        help='enable contrast ratio')
+    parser.add_argument('--motion_blur_hori',
+                        action='store_false',
+                        help='enable horizontal motion blur')
     args = parser.parse_args()
     return args
 
