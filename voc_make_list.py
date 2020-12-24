@@ -84,7 +84,7 @@ def parse_arguments(argv):
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--root_dir', type=str,
-                        help='root of VOC development kit', default='/home/husan/lightvision/datasets')
+                        help='root of VOC development kit', default='/home/husan/lightvision/yolov5_train/voc_det/')
     parser.add_argument('--sub_dir', action='append', type=str,
                         help='list of target VOC datasets')
     parser.add_argument('--img_ext', type=str,

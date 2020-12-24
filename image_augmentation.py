@@ -8,24 +8,9 @@ from pathlib import Path
 from numpy import expand_dims
 import cv2
 import utils
-from keras.preprocessing.image import load_img
-from keras.preprocessing.image import img_to_array
-from keras.preprocessing.image import ImageDataGenerator
-from keras.preprocessing.image import ImageDataGenerator
 
 
-#Creating instance of the ImageDataGenerator class
-datagen = ImageDataGenerator(
-        rotation_range=10,
-        width_shift_range=0.1,
-        height_shift_range=0.1,
-        rescale=1./255,
-        shear_range=0.5,
-        zoom_range=0.1,
-        horizontal_flip=True,
-        brightness_range=[0.5,1.0], 
-        fill_mode='nearest'
-        )
+
 
 
 def increase_brightness(img, value=10):
@@ -112,6 +97,23 @@ def motion_vertical_blur(img):
 
 
 def run_aug_data_generatorimage(entry, AUGMENTED_IMAGES):
+    from keras.preprocessing.image import load_img
+    from keras.preprocessing.image import img_to_array
+    from keras.preprocessing.image import ImageDataGenerator
+    from keras.preprocessing.image import ImageDataGenerator
+    #Creating instance of the ImageDataGenerator class
+    datagen = ImageDataGenerator(
+            rotation_range=10,
+            width_shift_range=0.1,
+            height_shift_range=0.1,
+            rescale=1./255,
+            shear_range=0.5,
+            zoom_range=0.1,
+            horizontal_flip=True,
+            brightness_range=[0.5,1.0], 
+            fill_mode='nearest'
+            )
+
     try:
         # load the image
         img=cv2.imread(entry.path)
