@@ -46,24 +46,26 @@ def move_or_copy_file_to_other_directory(path, file_name, src='JPEGImages', dst=
 
 
 def main(args):
-
-    path = args.root_dir + '/{}/JPEGImages/'
+    JPEGImages = args.image_dir
+    labels = args.label_dir
+    path = args.root_dir + '/{}/'+JPEGImages+'/'
     for sub in args.sub_dir:
         print('sub_dir: {}'.format(sub))
         img_path = []        
         for _, _, f in os.walk(path.format(sub)):
+            print(f)
             for file in f:
                 if '.txt' in file:
                     print(file)
                     image_file = file.replace('.txt', '.{}'.format(args.img_ext))
                     print(image_file)
                     img_path.append(path.format(sub) + image_file)
-                    move_or_copy_file_to_other_directory(os.path.join(args.root_dir, sub), file)
+                    move_or_copy_file_to_other_directory(os.path.join(args.root_dir, sub), file, src=JPEGImages, dst=labels)
        
 
         random.shuffle(img_path)
 
-        with open('{}/{}/{}.txt'.format(args.root_dir, sub, 'train_val'), 'w+') as f:
+        with open('{}/{}/{}.txt'.format(args.root_dir, sub, 'all'), 'w+') as f:
             for p in img_path:
                 f.write(p + '\n')
 
@@ -87,8 +89,11 @@ def parse_arguments(argv):
                         help='root of VOC development kit', default='/home/husan/lightvision/yolov5_train/voc_det/')
     parser.add_argument('--sub_dir', action='append', type=str,
                         help='list of target VOC datasets')
-    parser.add_argument('--img_ext', type=str,
-                        help='extension of image files', default='jpg')
+    parser.add_argument('--img_ext', type=str, help='extension of image files', default='jpg')
+
+    parser.add_argument('--image_dir', type=str, help='image files', default='JPEGImages')
+
+    parser.add_argument('--label_dir', type=str, help='image files', default='labels')
     
 
     return parser.parse_args(argv)
