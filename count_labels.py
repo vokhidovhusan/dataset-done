@@ -30,24 +30,30 @@ def main(args):
         sublabels_list = []
         for _, _, f in os.walk(os.path.join(path)):
             for file in f:
-                if '.json' in file:
+                if args.file_ext in file:
 
-                    filename = file.replace('.json', '')
+                    filename = file.replace(args.file_ext, '')
                     print(filename)
-                    file_labels = utils.get_lables(path, filename)
+                    print(path)
+                    if args.file_ext == '.json':
+                        file_labels = utils.get_lables(Path(os.path.join(path, 'Annotations')), filename,args.file_ext)
+                    elif args.file_ext == '.xml':
+                        file_labels = utils.get_lables_x(Path(os.path.join(path, 'Annotations')), filename,args.file_ext)
+                    else:
+                        continue
                     print(file_labels)
                     if len(file_labels) <= 0:
                         continue
-                    print(os.path.join(path, file.replace('.json', '.jpg')))
-                    if os.path.exists(os.path.join(path,  file)) and\
-                            os.path.exists(os.path.join(path,  file.replace('.json', '.jpg'))):
-                        if(utils.move_file_to_directories(path, 'JPEGImages', file.replace('.json', '.jpg'))):
-                            count_json += 1
-                        if(utils.move_file_to_directories(path, 'Annotations', file)):
-                            count_img += 1
-                    else:
-                       # print('file not found "{}/"'.format(file))
-                        continue
+                    print(os.path.join(path, file.replace(args.file_ext, '.jpg')))
+                    # if os.path.exists(os.path.join(path,  file)) and\
+                    #         os.path.exists(os.path.join(path,  file.replace(args.file_ext, '.jpg'))):
+                    #     if(utils.move_file_to_directories(path, 'JPEGImages', file.replace(args.file_ext, '.jpg'))):
+                    #         count_json += 1
+                    #     if(utils.move_file_to_directories(path, 'Annotations', file)):
+                    #         count_img += 1
+                    # else:
+                    #    # print('file not found "{}/"'.format(file))
+                    #     continue
 
                     if len(file_labels) > 1:
                         contains_duplicates = any(file_labels.count(element) > 1 for element in file_labels)
@@ -85,8 +91,8 @@ def main(args):
         # print(sublabels)
 
 
-        print(count_json)
-        print(count_img)
+        # print(count_json)
+        # print(count_img)
         with open(path_count_sublabels, 'a+') as out_file:
             print('writing into: ', path_count_sublabels)
             out_file.write(json.dumps(count_sublabel_dict))
@@ -109,9 +115,9 @@ def parse_arguments(argv):
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--root_dir', type=str,
-                        help='root of VOC development kit', default='/home/husan/lightvision/datasets/')
+                        help='root of VOC development kit', default='/home/husan/projects/domestic_waste/yolov5-train/datasets/')
     parser.add_argument('--sub_dir', action='append', type=str, help='root of VOC development kit')
-
+    parser.add_argument('--file_ext', type=str, help='file extension', default='.xml')
     return parser.parse_args(argv)
 
 

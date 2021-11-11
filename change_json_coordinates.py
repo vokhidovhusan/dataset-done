@@ -1,9 +1,6 @@
 import os
 import sys
 import argparse
-import json
-import cv2
-from numpy.lib.type_check import imag
 from pathlib import Path
 import utils
 
