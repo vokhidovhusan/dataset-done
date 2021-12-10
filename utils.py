@@ -132,13 +132,13 @@ def copy_file_to_directories_full_path(src, dst,  overwrite=False):
     bool_success = True
     try:
         if os.path.exists(dst) and not overwrite:
-            raise Exception("file exists!", "Can't move to")
+            raise Exception("file exists!", "Can't copy to")
         else:
             copy(src, dst)
             print('file has been copied to "{}/"'.format(dst))
 
     except IOError as e:
-        print('unable to move file %s' % e)
+        print('unable to copy file %s' % e)
         bool_success = False
 
     except Exception as e:
@@ -577,6 +577,72 @@ def cut_label_x(path, filename, box_list, img_folder = 'images', crop_img_folder
 
 
 def cut_label_taco(path, filename, box_list, crop_img_folder = 'cropped_images', margin = 0.0):
+    success = False
+    # c, w, h, x0, x1, y0,
+    # try:
+    if True:
+        crop_img_folder = Path(os.path.join(path, crop_img_folder))
+        print('crop_folder:', crop_img_folder)
+        crop_img_folder.mkdir(parents=True, exist_ok=True)
+        image_path = os.path.join('{}/{}'.format(path, filename))
+        print('Reading file {}'.format(image_path))
+        img = cv2.imread(image_path)
+        img.shape
+
+        label_count = 0
+
+        for c, w, h, x0, x1, y0, y1 in box_list:
+            print(c, w, h, x0, x1, y0, y1)
+            crop_img_c_folder = Path(os.path.join(crop_img_folder, c))
+            print(crop_img_c_folder)
+            crop_img_c_folder.mkdir(parents=True, exist_ok=True)
+
+            label_count += 1
+
+
+            margin_y = (y1 - y0) * margin 
+            print(margin_y)
+            margin_x = (x1 - x0) * margin
+            print(margin_x)
+
+            if y0 - margin_y > 0:
+                yy0 = y0 - margin_y 
+            else:
+                yy0 = 0
+
+            if y1 + margin_y < h:
+                yy1 = y1 + margin_y
+            else:
+                yy1 = h
+
+            if x0 - margin_x > 0:
+                xx0 = x0 - margin_x
+            else:
+                xx0 = 0
+
+            if x1 + margin_x < w:
+                xx1 = x1 + margin_x
+            else:
+                xx1 = w
+            print(w, h, x0, x1, y0, y1)
+            crop_img = img[int(yy0):int(yy1), int(xx0):int(xx1)]
+            print(crop_img.shape)
+            
+            crop_img_path = os.path.join('{}/{}_{}_{}.jpg'.format(crop_img_c_folder, filename[:-4].split('/')[-1], '{0:003}'.format(label_count), c))
+            print(crop_img_path)
+
+            cv2.imwrite(crop_img_path, crop_img)
+            cv2.waitKey(0)
+
+        success = True
+    # except AttributeError:
+    #     print("file does not have shape")
+    #     success = False
+    # finally:
+        print(label_count)
+        return success
+
+def cut_label_genome(path, filename, box_list, crop_img_folder = 'cropped_images', margin = 0.0):
     success = False
     # c, w, h, x0, x1, y0,
     # try:
